@@ -6,17 +6,22 @@
 
 * [Introduction](#introduction)
 * [Tips](#tips)
+  * [Excellent visuals](#excellent-visuals)
   * [Browse the history](#browse-the-history)
   * [Terminology](#terminology)
     * [General](#general)
     * [About commits](#about-commits)
 * [git commands](#git-commands)
+  * [git checkout](#git-checkout)
   * [git clone](#git-clone)
   * [git commit](#git-commit)
   * [git diff](#git-diff)
+  * [git fetch](#git-fetch)
   * [git init](#git-init)
   * [git log](#git-log)
   * [git mv](#git-mv)
+  * [git pull](#git-pull)
+  * [git remote](#git-remote)
   * [git reset](#git-reset)
   * [git revert](#git-revert)
   * [git restore](#git-restore)
@@ -30,6 +35,10 @@
 # Introduction
 
 # Tips
+
+## Excellent visuals
+
+- <http://ndpsoftware.com/git-cheatsheet.html>
 
 ## Browse the history
 
@@ -63,6 +72,13 @@
 
 # git commands
 
+## git checkout
+
+Switch branches or restore working tree files
+
+`$ git restore --source=HEAD --staged --worktree <file(s)>`: Restore both the index and the working tree  
+Which is equivalent to `git checkout`
+
 ## git clone
 
 Clone a repository into a new directory
@@ -86,6 +102,14 @@ and all you’ll change is your commit message.
 
 Show changes between commits, commit and working tree, etc
 
+## git fetch
+
+Download objects and refs from another repository
+
+![git_checkout](./git/git_fetch.png)
+
+`$ git fetch <remote>`
+
 ## git init
 
 Create an empty Git repository or reinitialize an existing one
@@ -102,6 +126,21 @@ _See [Browse the history](#browse-the-history)_
 ## git mv
 
 Move or rename a file, a directory, or a symlink
+
+## git pull
+
+Fetch from and integrate with another repository or a local branch
+
+`$ git pull`  
+`$ git pull origin`
+
+## git remote
+
+Manage set of tracked repositories
+
+`$ git remote add <shortname> <url>`: Add a remote, shortname can be used for git commands
+
+`-v`: Display URL
 
 ## git reset
 
@@ -165,3 +204,4 @@ _Command to be used when working with a bare repo_
 - <https://stackoverflow.com/questions/2221658/whats-the-difference-between-head-and-head-in-git>
 - <https://git-scm.com>
 - <https://git-scm.com/book/en/v2>
+- <http://ndpsoftware.com/git-cheatsheet.html>
