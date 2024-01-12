@@ -6,7 +6,6 @@
 
 * [Introduction](#introduction)
   * [Backlog / Todo](#backlog--todo)
-* [Tips](#tips)
   * [General](#general)
   * [Aliases](#aliases)
   * [Terminology](#terminology)
@@ -29,6 +28,7 @@
   * [git pull](#git-pull)
   * [git push](#git-push)
   * [git remote](#git-remote)
+  * [git ls-remote](#git-ls-remote)
   * [git submodule](#git-submodule)
 * [git - Branching, Merging & Patching](#git---branching-merging--patching)
   * [git branch](#git-branch)
@@ -58,12 +58,13 @@
 
 - Explore custome configuration of git mergetool (i.e. use nvim diff)
 
-# Tips
-
 ## General
 
-- Visual representation of the git stages & commands  
+- Great visual representation of the git stages & commands  
   <http://ndpsoftware.com/git-cheatsheet.html>
+
+- Guidelines  
+  **Do not rebase commits that exist outside your local repository**, people may have based work on.
 
 ## Aliases
 
@@ -75,6 +76,7 @@ $ git config --global alias.st status
 $ git config --global alias.lg "log --graph --date=relative --pretty=tformat:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%an %ad)%Creset'"
 $ git config --global alias.unstage 'reset HEAD --'
 $ git config --global alias.last 'log -1 HEAD'
+$ git config --global push.default current
 ```
 
 - `$ git unstage <file>` = `$ git reset HEAD -- <file>`
@@ -90,6 +92,10 @@ $ git config --global alias.last 'log -1 HEAD'
 `--branches`: For local branches  
 `--all`: For remotes stuffs (branches, tags, stash)  
 `--merges`: Check merges
+
+**push.default** set to **current**: Used to simplify the push command. Push the
+current branch to update a branch with the same name on the receiving end. Works
+in both central and non-central workflows.
 
 ## Terminology
 
@@ -200,7 +206,7 @@ Download objects and refs from another repository
 
 ![git_checkout](./git/git_fetch.png)
 
--`$ git fetch <remote>`
+- `$ git fetch <remote>`
 
 ## git pull
 
@@ -209,13 +215,16 @@ Fetch from and integrate with another repository or a local branch
 - `$ git pull`
 - `$ git pull origin`
 
+**Avoid `git pull`, preferred method is `git fetch` & `git merge`**
+
 ## git push
 
 Update remote refs along with associated objects
 
-- `$ git push <remote> <branch>`
+- `$ git push <remote> <name>`: Push remote branch
 - `$ git push origin <tagname>`: Push a particular tag
 - `$ git push origin --tags`: Push all tags
+- `$ git push origin --delete <name>`: Push removal of branch name
 - `$ git push origin --delete <tagname>`: Delete a remote tag
 
 ## git remote
@@ -224,11 +233,18 @@ Manage set of tracked repositories
 
 - `$ git remote add <shortname> <url>`: Add a remote, shortname can be used for
   git commands
-- `$ git remote show <remote>`: Show details about all remote repositories
 - `$ git remote rename <current> <new>` : Rename a remote reposity
 - `$ git remote remove <shortname>` : Remove a remote reposity
+- `$ git remote show <remote>`: Gives some information about remote
 
 `-v`: Display URL
+
+## git ls-remote
+
+List references in a remote repository
+
+- `$ git ls-remote`
+- `$ git ls-remote <remote>`
 
 ## git submodule
 
@@ -238,9 +254,22 @@ Manage set of tracked repositories
 
 List, create, or delete branches
 
+- `$ git branch`: List existing branches
 - `$ git branch <name>`: Create a new branch (i.e. creates a new pointer against
   current commit)
 - `$ git branch -d <name>`: Delete branch
+- `$ git branch -v`: List the last commit for each branch
+- `$ git branch -vv`: List the remote tracked branches (i.e. generally executed
+  after `$ git fetch --all`)
+- `$ git branch --merged`: Find all branches which can be safely deleted, since
+  those branches are fully contained by HEAD.
+- `$ git branch --no-merged`: Find branches which are candidates for merging
+  into HEAD, since those branches are not fully contained by HEAD.
+- `$ git branch --move <old_name> <new_name>`: Rename the branch locally
+- `$ git push --set-upstream origin <new_name>`: Push the new branch name
+- `$ git push origin --delete <name>`: Push removal of branch name
+- `$ git branch -u <remote>/<name>`: Change the upstream branch being tracked
+  against the current local branch
 
 ## git checkout
 
@@ -248,15 +277,17 @@ Switch branches or restore working tree files
 
 _From Git version 2.23 onwards you can use git switch instead of git checkout_
 
-- `$ git checkout <branch>`: Switch to a branch _This moves the `HEAD` to point
-  to the branch_
-
-- `$ git checkout -b <branch>`: Create & Switch to a branch in 1 command
+- `$ git checkout -b <branch>`: Create & Switch to a new branch (Locally)
+- `$ git checkout -b <branch> <remote>/<branch>`  
+   = `$ git checkout --track <remote>/<branch>`  
+   = `$ git checkout <branch>`  
+  Switch to a branch _This moves the `HEAD` to point to the branch_
+- `$ git checkout -b <local_n> <remote>/<branch>`: Use a specific local name
 
 **Special**
 
 - `$ git restore --source=HEAD --staged --worktree <file(s)>`: Restore both the
-  index and the working tree Which is equivalent to `git checkout`
+  index and the working tree, which is equivalent to `git checkout`
 
 ## git switch
 
@@ -325,6 +356,24 @@ reverts the changes made by other commits.
 ## git cherry-pick
 
 ## git rebase
+
+Reapply commits on top of another base tip
+
+Typical simple flow:
+
+- `$ git checkout <branch_name>`
+- `$ git rebase master`: Apply "branch_name" commits on top of master
+- `$ git checkout master`: Back to master
+- `$ git merge <branch_name>`: Fast-forward merge
+
+More complex but can be cery useful
+
+- `$ git rebase --onto master <branch1> <branch2>`: This basically says, “Take
+  the branch2, figure out the patches since it diverged from branch1, and replay
+  these patches in branch2 as if it was based directly off the master branch
+  instead.”
+- `$ git checkout master`
+- `$ git merge <branch2>`: Fast-forward merge
 
 ## git worktree
 
