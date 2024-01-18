@@ -46,7 +46,7 @@
 
 ## Backlog / Todo
 
-- Explore custome configuration of git mergetool (i.e. use nvim diff)
+- Explore custom configuration of git mergetool (i.e. Use nvim diff)
 
 ## General
 
@@ -97,27 +97,28 @@ in both central and non-central workflows.
 
 - **Index** = **Staging area**: Next files to be commited.
 - **Detached Head state**: When HEAD refers to a specific commit or remote
-  respository, as opposed to referring to a named branch (e.g. after running `git
+  repository, as opposed to referring to a named branch (e.g. After running `git
 checkout <sha1>`). If commits are added on top of a detached HEAD, nothing
   refers to those commits. Eventually those commits will be deleted by the GC.
   `git checkout -b foo` or `git switch -c foo` or `git branch foo` or `git tag
 foo`, any of those will create a reference to it.
-- **Fast-forward**: if the targetted branch commit is directly ahead of the
-  commit of the current branch, Git simply moves the pointer forward. when you try
+- **Fast-forward**: if the targeted branch commit is directly ahead of the
+  commit of the current branch, Git simply moves the pointer forward. When you try
   to merge one commit with a commit that can be reached by following the first
   commit’s history, Git simplifies things by moving the pointer forward because
   there is no divergent work to merge together — this is called a “fast-forward.
 - **rerere**: Reuse recorded resolution of conflicted merges.
 - **git gc**: Garbage collection.The command does a number of things: it gathers
   up all the loose objects and places them in packfiles, it consolidates packfiles
-  into one big packfile, and it removes objects that aren’t reachable from any
+  into one big packfile, and it removes objects that are not reachable from any
   commit and are a few months old.
 - **Plumbing and Porcelain**: subcommands that do low-level work and were
   designed to be chained together UNIX-style or called from scripts. These
   commands are generally referred to as Git’s “plumbing” commands, while the more
   user-friendly commands are called “porcelain” commands.
 - **Reflog**: A log of where HEAD and branch references have been for the last
-  few months `git reflog`
+  few months `git reflog`. This can be very useful to restore files, for
+  instance after a `git reset --hard` mistake.
 
 ### General
 
@@ -138,10 +139,10 @@ foo`, any of those will create a reference to it.
 **Commit ranges**
 
 - `$ git log HEAD~5..HEAD~2`: list of 3 commits, starting at HEAD~2
-- `$ git log master..experiment`: All the commits from exerimentt not yet merged
+- `$ git log master..experiment`: All the commits from experiment not yet merged
   into master. i.e. All commit reachable from experiment and not reachable by
   master
-- `$ git log experiment..master` All commits in master that arent's in
+- `$ git log experiment..master` All commits in master that are not in
   experiment
 - `$ git log origin/master..HEAD`: Any commits in current branch that aren’t in
   the remote origin, master branch. If git push is executed , the commits listed
@@ -355,6 +356,7 @@ _See [Browse the history](#browse-the-history)_
 Stash the changes in a dirty working directory away
 
 - `$ git stash`: Record the current state of the working directory and the index
+- `$ git stash push -m <msg>`: Same as with no option but adding a description
 - `$ git stash list`: List of stored stashes
 - `$ git stash show`: Diplay modification of the most recent stash
 - `$ git stash apply`: Apply the most recent stash (Keep the stash in stash list)
